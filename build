@@ -1,0 +1,48 @@
+#!/bin/bash -x
+
+: "${dummy_version="$(date +"%Y%m%d_%H%M")"}"
+
+template=spec.template
+opt_name=dummy-pkg
+
+# handle no arguments
+[ ${#@} -eq 0 ] && show_help
+
+ARGS=$(getopt -o "" -l "name:" -n "getopt" -- "$@") \
+    || exit 1
+eval set -- "$ARGS"
+while true; do
+    # now the name is in $1 and argument in $2
+    case "$1" in
+    --name)
+        opt_name="$2"
+        shift 2
+        ;;
+
+    --) # end!
+        shift
+        break
+        ;;
+
+    *)
+        echo "programmer mistake ($1)" >&2
+        exit 1
+        ;;
+    esac
+done
+
+spec="$opt_name.spec"
+
+sed \
+    -e "s/@dummy-version@/$dummy_version/" \
+    -e "s/@name@/$opt_name/" \
+    "$template" > "$spec"
+
+test -z "$RPMBUILD" && RPMBUILD=rpmbuild
+$RPMBUILD --define "_sourcedir $PWD" \
+    --define "_rpmdir $PWD" \
+    --define "_specdir $PWD" \
+    --define "_builddir $PWD" \
+    --define "_srcrpmdir $PWD" \
+    --define "dist %{nil}" \
+    -bs "$spec"

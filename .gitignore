@@ -1,0 +1,5 @@
+*.spec
+*.src.rpm
+x86_64
+i386
+noarch
