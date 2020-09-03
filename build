@@ -3,21 +3,26 @@
 : "${dummy_version="$(date +"%Y%m%d_%H%M")"}"
 
 template=spec.template
+
 opt_name=dummy-pkg
+opt_version=$dummy_version
 
 opt_rpm=false
 
 # handle no arguments
 [ ${#@} -eq 0 ] && show_help
 
-ARGS=$(getopt -o "" -l "name:,rpm" -n "getopt" -- "$@") \
+ARGS=$(getopt -o "" -l "name:,version:,rpm" -n "getopt" -- "$@") \
     || exit 1
 eval set -- "$ARGS"
 while true; do
     # now the name is in $1 and argument in $2
     case "$1" in
-    --name)
-        opt_name="$2"
+    --name|--version)
+        opt=${1##--}
+        opt=${opt##-}
+        opt=${opt//-/_}
+        eval "opt_$opt=\$2"
         shift 2
         ;;
 
@@ -41,7 +46,7 @@ done
 spec="$opt_name.spec"
 
 sed \
-    -e "s/@dummy-version@/$dummy_version/" \
+    -e "s/@dummy-version@/$opt_version/" \
     -e "s/@name@/$opt_name/" \
     "$template" > "$spec"
 
@@ -59,4 +64,4 @@ rm ./"$spec"
 "$opt_rpm" || exit 0
 
 $RPMBUILD --define "_rpmdir $PWD" \
-    --rebuild "$opt_name-$dummy_version"*.src.rpm
+    --rebuild "$opt_name-$opt_version"*.src.rpm
