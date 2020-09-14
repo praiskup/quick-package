@@ -2,7 +2,7 @@
 
 Name:		@name@
 Version:	@dummy-version@
-Release:	0%{?dist}
+Release:	1%{?dist}
 Summary:	dummy package
 
 Group:		NONE
