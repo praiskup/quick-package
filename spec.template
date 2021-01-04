@@ -3,10 +3,10 @@
 Name:		@name@
 Version:	@dummy-version@
 Release:	1%{?dist}
-Summary:	dummy package
+Summary:	A dummy package
 
 Group:		NONE
-License:	GPL
+License:	GPLv3+
 URL:		http://example.com/
 
 %if 0%{?rhel} && 0%{?rhel} <= 5
@@ -17,6 +17,7 @@ Source0:	https://raw.githubusercontent.com/praiskup/quick-package/master/README.
 %{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}-%{version}}
 
 %description
+Description for the %name package that is used for various testing tasks.
 
 
 %prep
