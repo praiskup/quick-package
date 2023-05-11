@@ -4,7 +4,7 @@
 
 template=spec.template
 
-opt_name=dummy-pkg
+opt_name=introspect-mock-chroot
 opt_version=$dummy_version
 
 opt_rpm=false

@@ -26,6 +26,25 @@ Description for the %name package that is used for various testing tasks.
 %build
 
 
+%post
+cat >&2 <<EOF
+WARNING: This package probably shouldn't be installed on your box!
+
+This package should be installed into the Mock chroot.  The typical
+use-case is to
+
+1. build this package in some Copr project (say 'owner/foo'),
+
+2. generate the mock config file with
+    copr mock-config owner/foo fedora-rawhide-x86_64 > /tmp/foo.cfg
+
+3. run mock with appropriate parameters:
+    mock -r /tmp/foo.cfg --config-opts=bootstrap_chroot_additional_packages=introspect-mock-chroot --shell
+
+Feel free to add additional "Requires:" if you need other packages
+installed, or execute any other command in the %%post scriptlet.
+EOF
+
 %install
 rm -rf $RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT/%{_pkgdocdir}
