@@ -9,6 +9,8 @@ Group:		NONE
 License:	GPLv3+
 URL:		http://example.com/
 
+Requires(post): util-linux-core
+
 %if 0%{?rhel} && 0%{?rhel} <= 5
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 %endif
@@ -41,9 +43,13 @@ use-case is to
 3. run mock with appropriate parameters:
     mock -r /tmp/foo.cfg --config-opts=bootstrap_chroot_additional_packages=introspect-mock-chroot --shell
 
-Feel free to add additional "Requires:" if you need other packages
-installed, or execute any other command in the %%post scriptlet.
+Feel free to add additional "Requires:" or "Requires(post):" if you need other
+packages installed, or execute any other additional command in the %%post
+scriptlet.
 EOF
+
+findmnt
+
 
 %install
 rm -rf $RPM_BUILD_ROOT
