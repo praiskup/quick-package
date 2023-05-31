@@ -48,7 +48,8 @@ packages installed, or execute any other additional command in the %%post
 scriptlet.
 EOF
 
-findmnt
+set -x
+findmnt >&2 || :
 
 
 %install
