@@ -1,7 +1,7 @@
 %global		_source_filedigest_algorithm md5
 
-Name:		@name@
-Version:	@dummy-version@
+Name:		exclusivearch-test
+Version:	1
 Release:	1%{?dist}
 Summary:	A dummy package
 
@@ -14,10 +14,22 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 %endif
 Source0:	https://raw.githubusercontent.com/praiskup/quick-package/master/README.xz
 
+BuildArch:      noarch
+
+# Build only on aarch64 and x86_64
+ExclusiveArch:  noarch x86_64 aarch64
+
+
 %{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}-%{version}}
 
 %description
 Description for the %name package that is used for various testing tasks.
+
+
+%package subpackage
+Summary: subpackage to demonstrate exclusivearch
+%description subpackage
+Placeholder text.
 
 
 %prep
@@ -30,6 +42,7 @@ Description for the %name package that is used for various testing tasks.
 rm -rf $RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT/%{_pkgdocdir}
 xz -d %{SOURCE0} --stdout > $RPM_BUILD_ROOT/%{_pkgdocdir}/README
+echo hello > $RPM_BUILD_ROOT/%{_pkgdocdir}/exclusivearch
 
 
 %clean
@@ -39,6 +52,11 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %dir %{_pkgdocdir}
 %doc %{_pkgdocdir}/README
+
+
+%files subpackage
+%doc %{_pkgdocdir}/exclusivearch
+
 
 %changelog
 * Thu Jun 05 2014 Pavel Raiskup <praiskup@redhat.com> - 0-1
